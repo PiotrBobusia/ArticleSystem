@@ -43,11 +43,11 @@ namespace ArticleSystem.Repository
         {
             User? potentialUser = _context.Users.Include(x => x.Role).FirstOrDefault(x => x.Login == userLoginDto.Login);
 
-            if (potentialUser is null) throw new Exception("Wrong login or password.");
+            if (potentialUser is null) throw new BadLoginException("Wrong login or password.");
 
             var result = _passwordHasher.VerifyHashedPassword(potentialUser, potentialUser.HashedPassword, userLoginDto.Password);
 
-            if (result != PasswordVerificationResult.Success) throw new Exception("Wrong login or password.");
+            if (result != PasswordVerificationResult.Success) throw new BadLoginException("Wrong login or password.");
 
             return potentialUser;
         }

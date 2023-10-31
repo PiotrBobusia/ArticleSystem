@@ -1,6 +1,7 @@
 ﻿using ArticleSystem.Database;
 using ArticleSystem.DTOs;
 using ArticleSystem.Entity;
+using ArticleSystem.Exceptions;
 using ArticleSystem.Services;
 using AutoMapper;
 
@@ -26,6 +27,16 @@ namespace ArticleSystem.Repository
             newComment.AuthorId = int.Parse(_userContext.getUserId());
 
             _context.Comments.Add(newComment);
+            _context.SaveChanges();
+        }
+
+        public void DeleteComment(int id)
+        {
+            Comment? potentialComment = _context.Comments.FirstOrDefault(x => x.Id == id);
+
+            if (potentialComment is null) throw new NoCommentToRemoveException("There's no comment to delete");
+
+            _context.Comments.Remove(potentialComment);
             _context.SaveChanges();
         }
     }
