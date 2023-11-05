@@ -71,6 +71,7 @@ builder.Services.AddScoped<IAuthorizationHandler, DeleteArticleUserRequirementHa
 builder.Services.AddScoped<IAuthorizationHandler, AddTagUserRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, DeleteTagUserRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, DeleteAllTagUserRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, DeleteCommentUserRequirementHandler>();
 
 var app = builder.Build();
 

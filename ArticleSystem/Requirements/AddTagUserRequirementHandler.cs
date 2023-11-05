@@ -15,7 +15,7 @@ namespace ArticleSystem.Requirements
             _articleRepository = articleRepository;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AddTagUserRequirement requirement, TagArtDto tagDto)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AddTagUserRequirement requirement, TagArtDto tagDto)
         {
             var userRole = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var userId = int.Parse(context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
@@ -23,6 +23,7 @@ namespace ArticleSystem.Requirements
             if (userRole == "Admin" || userRole == "Moderator")
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
 
             var article = _articleRepository.GetArticleById(tagDto.ArticleId);
@@ -31,7 +32,7 @@ namespace ArticleSystem.Requirements
                 context.Succeed(requirement);
             }
 
-            return;
+            return Task.CompletedTask;
         }
     }
 }

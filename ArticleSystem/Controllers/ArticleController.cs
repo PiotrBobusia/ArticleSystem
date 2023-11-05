@@ -4,6 +4,7 @@ using ArticleSystem.CQRS.Commands.AddNewTag;
 using ArticleSystem.CQRS.Commands.AddNewTagList;
 using ArticleSystem.CQRS.Commands.DeleteAllTag;
 using ArticleSystem.CQRS.Commands.DeleteArticle;
+using ArticleSystem.CQRS.Commands.DeleteComment;
 using ArticleSystem.CQRS.Commands.DeleteTag;
 using ArticleSystem.CQRS.Commands.ModifyArticle;
 using ArticleSystem.CQRS.Queries.GetAllArticles;
@@ -141,7 +142,7 @@ namespace ArticleSystem.Controllers
         [HttpPost("tags/add")]
         public async Task<ActionResult> AddTag([FromBody]AddNewTagCommand tagAddDto)
         {
-            var authorizationResult = _authorizationService.AuthorizeAsync(HttpContext.User, tagAddDto, new AddTagUserRequirement()).Result;
+            var authorizationResult = await _authorizationService.AuthorizeAsync(HttpContext.User, tagAddDto, new AddTagUserRequirement());
             if (!authorizationResult.Succeeded)
             {
                 throw new AccessDeniedException("Access Denied");
@@ -209,10 +210,18 @@ namespace ArticleSystem.Controllers
         }
 
         [Authorize]
-        [HttpPost("comment/delete-{commentId}")]
+        [HttpDelete("comment/delete-{commentId}")]
         public async Task<ActionResult> DeleteComment([FromQuery]int commentId)
         {
-            return Ok(); ///////////////////////TO DO
+            var authorizationResult = await _authorizationService.AuthorizeAsync(HttpContext.User, commentId, new DeleteCommentUserRequirement());
+            if (!authorizationResult.Succeeded)
+            {
+                throw new AccessDeniedException("Access Denied");
+            }
+
+            await _mediator.Send(new DeleteCommentCommand(commentId));
+
+            return Ok("The comment has ben successfully deleted");
         }
 
     }

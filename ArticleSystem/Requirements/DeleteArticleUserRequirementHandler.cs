@@ -21,10 +21,12 @@ namespace ArticleSystem.Requirements
             if (userRole == "Admin" || userRole == "Moderator")
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
             else if (!requirement._byTitle && _articleRepository.GetArticleByUserId(userId).Any(x => x.Id == int.Parse(articleIdTitle)))
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
             else if (requirement._byTitle && _articleRepository.GetArticleByUserId(userId).Any(x => x.Title.ToLower().Equals(articleIdTitle.ToLower())))
             {

@@ -22,6 +22,7 @@ namespace ArticleSystem.Requirements
             if(userRole == "Admin" || userRole == "Moderator")
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
 
             var userArticles = _articleRepository.GetArticleByUserId(userId);

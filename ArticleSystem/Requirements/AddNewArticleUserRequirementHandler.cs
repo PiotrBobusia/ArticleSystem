@@ -13,6 +13,7 @@ namespace ArticleSystem.Requirements
             if (article.Category != Category.ForAdult && article.Category != Category.Premium)
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
 
             var userRole = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
@@ -23,6 +24,7 @@ namespace ArticleSystem.Requirements
                  userRole == "Admin"))
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
 
             var userBirthString = context.User.Claims.FirstOrDefault(x => x.Type == "Birth").Value;
