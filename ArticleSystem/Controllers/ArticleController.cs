@@ -109,7 +109,7 @@ namespace ArticleSystem.Controllers
 
 
         [Authorize]
-        [HttpPost("delete-{articleId}")]
+        [HttpDelete("delete-{articleId}")]
         public async Task<ActionResult> DeleteArticleById([FromRoute]string articleId)
         {
             var authorizationResult = _authorizationService.AuthorizeAsync(HttpContext.User, articleId, new DeleteArticleUserRequirement()).Result;
@@ -124,7 +124,7 @@ namespace ArticleSystem.Controllers
         }
 
         [Authorize]
-        [HttpPost("delete")]
+        [HttpDelete("delete-by-title")]
         public async Task<ActionResult> DeleteArticleByTitle([FromBody]string articleTitle)
         {
             var authorizationResult = _authorizationService.AuthorizeAsync(HttpContext.User, articleTitle, new DeleteArticleUserRequirement(true)).Result;
